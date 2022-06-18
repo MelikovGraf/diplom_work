@@ -1,39 +1,60 @@
 package ru.netology.newprescription.data
 
-import ru.netology.newprescription.activity.RecipeItem
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.activity.RecipesOfList
-import java.lang.RuntimeException
 
 object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
 
-    private val recipeList = mutableListOf<RecipeItem>()
+    private const val RECIPE_COUNT = 5
     private var id = 0
+    private val recipeListData = MutableLiveData<List<Recipe>>()
+    private val recipeList = mutableListOf<Recipe>()
 
-    override fun addRecipe(recipe: RecipeItem) {
-        if (recipe.id == RecipeItem.UNDEFINED_ID) {
+
+    init {
+        for (r in 0..RECIPE_COUNT) {
+            val newRecipe = Recipe(
+                title = "Recipe №$r",
+                author = "Me",
+                type = "Russian food"
+            )
+            addRecipe(newRecipe)
+        }
+    }
+
+    override fun addRecipe(recipe: Recipe) {
+        if (recipe.id == Recipe.IDENT) {
             val recipeId = id++
             recipeList.add(recipe.copy(id = recipeId))
-        } else recipeList.add(recipe)
+        } else editRecipe(recipe)
+        updateList()
     }
 
-    override fun deleteRecipe(recipe: RecipeItem) {
+    override fun deleteRecipe(recipe: Recipe) {
         recipeList.remove(recipe)
+        updateList()
     }
 
-    override fun editRecipe(recipe: RecipeItem) {
-        val lastRecipe = getRecipe(recipe.id)
-        recipeList.remove(lastRecipe)
-        addRecipe(recipe)
+    override fun editRecipe(recipe: Recipe) {
+        recipeList.replaceAll {
+            if (it.id == recipe.id) recipe else it
+        }
+        updateList()
     }
 
-    override fun getRecipe(recipeId: Int): RecipeItem {
+    override fun getRecipe(recipeId: Int): Recipe {
         return recipeList.find {
             it.id == recipeId
         } ?: throw RuntimeException("The recipe's $recipeId is not in the list!")
     }
 
-    override fun getRecipeList(): List<RecipeItem> {
+    override fun getRecipeList(): LiveData<List<Recipe>> {
+        return recipeListData
+    }
 
-        return recipeList.toList()
+    private fun updateList() {
+        recipeListData.value = recipeList.toList()
     }
 }

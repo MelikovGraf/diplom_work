@@ -4,7 +4,7 @@ class AddRecipeFragment(
     private val listOfRecipes: RecipesOfList
 ) {
 
-    fun addRecipe(recipe: RecipeItem) {
+    fun addRecipe(recipe: Recipe) {
         listOfRecipes.addRecipe(recipe)
     }
 }

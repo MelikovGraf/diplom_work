@@ -4,7 +4,7 @@ class DeleteRecipeFragment(
     private val listOfRecipes: RecipesOfList
 ) {
 
-    fun deleteRecipe(recipe: RecipeItem) {
+    fun deleteRecipe(recipe: Recipe) {
         listOfRecipes.deleteRecipe(recipe)
     }
 }

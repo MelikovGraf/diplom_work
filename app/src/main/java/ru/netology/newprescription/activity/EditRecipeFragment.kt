@@ -4,7 +4,7 @@ class EditRecipeFragment(
     private val listOfRecipes: RecipesOfList
 ) {
 
-    fun editRecipe(recipe: RecipeItem) {
+    fun editRecipe(recipe: Recipe) {
         listOfRecipes.editRecipe(recipe)
     }
 }

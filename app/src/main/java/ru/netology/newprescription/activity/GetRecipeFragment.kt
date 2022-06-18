@@ -4,7 +4,7 @@ class GetRecipeFragment(
     private val listOfRecipes: RecipesOfList
 ) {
 
-    fun getRecipe(recipeId: Int): RecipeItem {
+    fun getRecipe(recipeId: Int): Recipe {
         return listOfRecipes.getRecipe(recipeId)
     }
 }
