@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredients"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shaped_rectangle"
+    android:backgroundTint="@color/colorLightGrey"
+    android:layout_margin="1dp" >
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/base_text_size"
+        android:layout_margin="@dimen/base_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="1. " />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/element"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="#00008b"
+        android:textSize="@dimen/base_text_size"
+        app:layout_constraintEnd_toStartOf="@id/ingredientPrice"
+        app:layout_constraintStart_toEndOf="@id/position"
+        app:layout_constraintTop_toTopOf="@id/position"
+        tools:text="ingredient" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ingredientPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_margin"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/colorLiked"
+        android:textSize="@dimen/base_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/element"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/element"
+        tools:text="price" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
