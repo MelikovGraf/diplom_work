@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_spacing_8dp">8dp</dimen>
+    <dimen name="common_spacing_16dp">16dp</dimen>
+    <dimen name="common_spacing_32dp">32dp</dimen>
+    <dimen name="common_spacing_48dp">48dp</dimen>
+
+    <!-- paddings -->
+    <dimen name="base_padding">8dp</dimen>
+
+    <!-- margins -->
+    <dimen name="base_margin">8dp</dimen>
+    <dimen name="fab_button_margin">16dp</dimen>
+
+    <!-- element sizes -->
+    <dimen name="recipe_height">240dp</dimen>
+    <dimen name="cooking_time">75dp</dimen>
+    <dimen name="button_size">40dp</dimen>
+    <dimen name="icon_size">48dp</dimen>
+
+    <!-- text sizes -->
+    <dimen name="base_text_size">16sp</dimen>
+    <dimen name="title_size">24sp</dimen>
+    <dimen name="author_size">16sp</dimen>
+    <dimen name="cooking_time_size">16sp</dimen>
+</resources>

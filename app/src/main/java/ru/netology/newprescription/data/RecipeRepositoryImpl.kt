@@ -17,8 +17,8 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
         for (r in 0..RECIPE_COUNT) {
             val newRecipe = Recipe(
                 title = "Recipe №$r",
-                author = "Me",
-                type = "Russian food"
+                author = "favourites",
+                type = ""
             )
             addRecipe(newRecipe)
         }

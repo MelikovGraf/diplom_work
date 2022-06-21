@@ -15,4 +15,8 @@
     <color name="colorMediumGrey">#a59a9a</color>
     <color name="colorLiked">#FF0000</color>
     <color name="colorDarkGrey">#5b5555</color>
+
+    <color name="colorBackground">#80FFFFFF</color>
+    <color name="colorStroke">#FFFFFFFF</color>
+    <color name="colorHolyGrail">#ebd619</color>
 </resources>
