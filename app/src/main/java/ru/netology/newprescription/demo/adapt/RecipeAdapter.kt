@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.R
-import ru.netology.newprescription.databinding.RecipeFragmentBinding
+import ru.netology.newprescription.databinding.RecipeViewFragmentBinding
 import ru.netology.newprescription.activity.Recipe
 
 class RecipeAdapter(
@@ -16,7 +16,7 @@ class RecipeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = RecipeFragmentBinding.inflate(inflater, parent, false)
+        val binding = RecipeViewFragmentBinding.inflate(inflater, parent, false)
         return ViewHolder(binding, recipeListener)
     }
 
@@ -25,7 +25,7 @@ class RecipeAdapter(
     }
 
     class ViewHolder(
-        private val binding: RecipeFragmentBinding,
+        private val binding: RecipeViewFragmentBinding,
         private val listener: RecipeListener
     ) : RecyclerView.ViewHolder(binding.root) {
 

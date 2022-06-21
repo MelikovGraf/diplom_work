@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/base_padding">
+    android:padding="@dimen/base_padding"
+    android:id="@+id/recipe_view" >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recipe_overview"
@@ -13,7 +14,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/oriental_cuisine" />
+        tools:src="@drawable/Muhammara" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/category"
