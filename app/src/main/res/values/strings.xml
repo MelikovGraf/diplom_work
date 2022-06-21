@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewPrescription</string>
+    <string name="add_recipe">Add recipe</string>
 </resources>

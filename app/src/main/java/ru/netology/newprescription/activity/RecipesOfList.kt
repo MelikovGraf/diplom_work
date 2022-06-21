@@ -1,15 +1,17 @@
 package ru.netology.newprescription.activity
 
+import androidx.lifecycle.LiveData
+
 interface RecipesOfList {
 
-    fun addRecipe(recipe: RecipeItem)
+    fun addRecipe(recipe: Recipe)
 
-    fun deleteRecipe(recipe: RecipeItem)
+    fun deleteRecipe(recipe: Recipe)
 
-    fun editRecipe(recipe: RecipeItem)
+    fun editRecipe(recipe: Recipe)
 
-    fun getRecipe(recipeId: Int): RecipeItem
+    fun getRecipe(recipeId: Int): Recipe
 
-    fun getRecipeList(): List<RecipeItem>
+    fun getRecipeList(): LiveData<List<Recipe>>
 
 }
