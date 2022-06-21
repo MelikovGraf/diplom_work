@@ -1,14 +1,16 @@
-package ru.netology.newprescription.demo
+package ru.netology.newprescription.demo.viewModel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import ru.netology.newprescription.activity.*
 import ru.netology.newprescription.data.RecipeRepositoryImpl
+import ru.netology.newprescription.demo.adapt.RecipeListener
 
 class Pattern(
 
     application: Application
-) : AndroidViewModel(application) {
+) : AndroidViewModel(application), RecipeListener {
 
     private val repository = RecipeRepositoryImpl
 
@@ -36,4 +38,13 @@ class Pattern(
         return getRecipeFragment.getRecipe(recipeId)
     }
 
+    override fun onFavoriteClicked(recipe: Recipe) = repository.isFavorite(recipe.id)
+
+    override fun onRecipeClicked(recipe: Recipe) {
+        Toast.makeText(
+            getApplication<Application>().applicationContext,
+            "The author of the recipe ${recipe.author}",
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }

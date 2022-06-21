@@ -14,4 +14,6 @@ interface RecipesOfList {
 
     fun getRecipeList(): LiveData<List<Recipe>>
 
+    fun isFavorite(recipeId: Int)
+
 }

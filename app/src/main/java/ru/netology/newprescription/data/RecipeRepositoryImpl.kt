@@ -17,8 +17,9 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
         for (r in 0..RECIPE_COUNT) {
             val newRecipe = Recipe(
                 title = "Recipe №$r",
-                author = "favourites",
-                type = ""
+                author = "Favourites",
+                type = "Oriental cuisine",
+                dishTime = "0h\n50min"
             )
             addRecipe(newRecipe)
         }
@@ -52,6 +53,13 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
 
     override fun getRecipeList(): LiveData<List<Recipe>> {
         return recipeListData
+    }
+
+    override fun isFavorite(recipeId: Int) {
+        recipeList.replaceAll {
+            if (it.id == recipeId) it.copy(favorite = !it.favorite) else it
+        }
+        updateList()
     }
 
     private fun updateList() {
