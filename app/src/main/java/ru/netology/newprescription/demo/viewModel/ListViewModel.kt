@@ -8,6 +8,7 @@ import ru.netology.newprescription.activity.fragment.AddRecipeFragment
 import ru.netology.newprescription.activity.fragment.DeleteRecipeFragment
 import ru.netology.newprescription.activity.fragment.EditRecipeFragment
 import ru.netology.newprescription.activity.fragment.GetRecipeFragment
+import ru.netology.newprescription.activity.repository.RecipesOfList
 import ru.netology.newprescription.data.RecipeRepositoryImpl
 import ru.netology.newprescription.demo.adapt.listener.RecipeListListener
 import ru.netology.newprescription.utils.MultipleDevelopment
@@ -55,4 +56,8 @@ class ListViewModel(
         ).show()
         navigateToRecipeDetailsScreen.value = recipe
     }
+
+    override fun onSearchClicked(request: String) = repository.searchRecipe(request)
+
+    override fun onCancelClicked() = repository.searchRecipe(RecipesOfList.CANCEL_SEARCH)
 }

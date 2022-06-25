@@ -7,34 +7,36 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topBar"
+        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_200"
+        app:menu="@menu/top_bar_menu"
         app:title="Screen Title"
         app:titleTextColor="@color/white">
 
         <EditText
-            android:id="@+id/toolBar"
+            android:id="@+id/toolBarEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shaped_rectangle"
             android:gravity="center_vertical"
+            android:hint="@string/top_bar_search"
             android:padding="@dimen/base_padding"
             android:singleLine="true"
             android:textSize="@dimen/base_text_size"
             android:textStyle="bold"
-            android:visibility="gone"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+            android:visibility="gone" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_fragment"
+        android:id="@+id/nav_host_fragment_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
-        tools:context=".presentation.ui.MainActivity" />
+        tools:context=".demo.userInterface.MainActivity" />
+
 </LinearLayout>

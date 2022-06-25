@@ -17,6 +17,7 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
     private var id = 0
     private val recipeListData = MutableLiveData<List<Recipe>>()
     private val recipeList = mutableListOf<Recipe>()
+    private var orderedRecipeList = mutableListOf<Recipe>()
 
 
     init {
@@ -31,7 +32,8 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
                     Ingredient(
                         "Ingredient $it",
                         "${Random.nextInt(10, 100)} шт.",
-                        it)
+                        it
+                    )
                 },
                 cookingList =
                 List(COOKING_COUNT) {
@@ -47,19 +49,19 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
             val recipeId = id++
             recipeList.add(recipe.copy(id = recipeId))
         } else editRecipe(recipe)
-        updateList()
+        updateList(isSorted = false)
     }
 
     override fun deleteRecipe(recipe: Recipe) {
         recipeList.remove(recipe)
-        updateList()
+        updateList(isSorted = false)
     }
 
     override fun editRecipe(recipe: Recipe) {
         recipeList.replaceAll {
             if (it.id == recipe.id) recipe else it
         }
-        updateList()
+        updateList(isSorted = false)
     }
 
     override fun getRecipe(recipeId: Int): Recipe {
@@ -73,27 +75,48 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
     }
 
     override fun isFavorite(recipeId: Int) {
-        recipeList.replaceAll {
-            if (it.id == recipeId) it.copy(favorite = !it.favorite) else it
+        recipeList.replaceAll { if (it.id == recipeId) it.copy(favorite = !it.favorite) else it }
+        if (orderedRecipeList.isEmpty()) {
+            updateList(isSorted = false)
+        } else {
+            orderedRecipeList.replaceAll { if (it.id == recipeId) it.copy(favorite = !it.favorite) else it }
+            updateList(isSorted = true)
         }
-        updateList()
     }
 
     override fun ingredientsSteps(recipe: Recipe) {
         recipeList.replaceAll {
             if (it.id == recipe.id) it.copy(isIngredients = !it.isIngredients) else it
         }
-        updateList()
+        updateList(isSorted = false)
     }
 
     override fun cookSteps(recipe: Recipe) {
         recipeList.replaceAll {
             if (it.id == recipe.id) it.copy(isCookingSteps = !it.isCookingSteps) else it
         }
-        updateList()
+        updateList(isSorted = false)
     }
 
-    private fun updateList() {
-        recipeListData.value = recipeList.toList()
+    override fun searchRecipe(request: String) {
+        if (request == RecipesOfList.CANCEL_SEARCH) {
+            orderedRecipeList.clear()
+            updateList(isSorted = false)
+        } else {
+            orderedRecipeList = recipeList.filter {
+                it.title.contains(request, ignoreCase = true) || it.author.contains(
+                    request,
+                    ignoreCase = true
+                )
+            } as MutableList<Recipe>
+            updateList(isSorted = true)
+        }
+    }
+
+    private fun updateList(isSorted: Boolean) {
+        if (isSorted)
+            recipeListData.value = orderedRecipeList.toList()
+        else
+            recipeListData.value = recipeList.toList()
     }
 }

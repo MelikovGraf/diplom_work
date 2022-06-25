@@ -1,11 +1,12 @@
 package ru.netology.newprescription.demo.userInterface
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.EditText
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.RecipeFunctionsFragmentBinding
@@ -18,11 +19,23 @@ class DetailsFragment : Fragment() {
     private val viewModel: DetailsViewModel by viewModels()
     private val args by navArgs<DetailsFragmentArgs>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = RecipeFunctionsFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
+
+        val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (toolBarEditText.text.isNotEmpty()) toolBarEditText.visibility = View.VISIBLE
+            findNavController().popBackStack()
+        }
 
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val recipe = recipeList.find { it.id == args.recipeId } ?: return@observe
@@ -83,4 +96,22 @@ class DetailsFragment : Fragment() {
             }
         }
     }.root
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_bar_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
+        toolBarEditText.visibility = View.GONE
+        super.onPrepareOptionsMenu(menu)
+        with(menu) {
+            findItem(R.id.add_button).isVisible = false
+            findItem(R.id.edit_button).isVisible = true
+            findItem(R.id.cancel_button).isVisible = false
+            findItem(R.id.delete_button).isVisible = true
+            findItem(R.id.search_button).isVisible = false
+            findItem(R.id.filter_button).isVisible = false
+        }
+    }
 }
