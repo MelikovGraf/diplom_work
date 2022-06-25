@@ -1,4 +1,4 @@
-package ru.netology.newprescription.demo
+package ru.netology.newprescription.demo.userInterface
 
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.newprescription.R

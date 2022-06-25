@@ -2,12 +2,18 @@ package ru.netology.newprescription.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import ru.netology.newprescription.activity.CookingStage
+import ru.netology.newprescription.activity.Ingredient
 import ru.netology.newprescription.activity.Recipe
-import ru.netology.newprescription.activity.RecipesOfList
+import ru.netology.newprescription.activity.repository.RecipesOfList
+import kotlin.random.Random
 
 object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
 
     private const val RECIPE_COUNT = 5
+    private const val INGREDIENTS_COUNT = 5
+    private const val COOKING_COUNT = 5
+
     private var id = 0
     private val recipeListData = MutableLiveData<List<Recipe>>()
     private val recipeList = mutableListOf<Recipe>()
@@ -19,7 +25,18 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
                 title = "Recipe №$r",
                 author = "Favourites",
                 type = "Oriental cuisine",
-                dishTime = "0h\n50min"
+                dishTime = "0h\n50min",
+                ingredientsList =
+                List(INGREDIENTS_COUNT) {
+                    Ingredient(
+                        "Ingredient $it",
+                        "${Random.nextInt(10, 100)} шт.",
+                        it)
+                },
+                cookingList =
+                List(COOKING_COUNT) {
+                    CookingStage("Description $it", it)
+                }
             )
             addRecipe(newRecipe)
         }
@@ -58,6 +75,20 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
     override fun isFavorite(recipeId: Int) {
         recipeList.replaceAll {
             if (it.id == recipeId) it.copy(favorite = !it.favorite) else it
+        }
+        updateList()
+    }
+
+    override fun ingredientsSteps(recipe: Recipe) {
+        recipeList.replaceAll {
+            if (it.id == recipe.id) it.copy(isIngredients = !it.isIngredients) else it
+        }
+        updateList()
+    }
+
+    override fun cookSteps(recipe: Recipe) {
+        recipeList.replaceAll {
+            if (it.id == recipe.id) it.copy(isCookingSteps = !it.isCookingSteps) else it
         }
         updateList()
     }
