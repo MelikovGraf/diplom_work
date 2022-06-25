@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/base_padding"
-    android:id="@+id/creating_a_dish">
+    android:id="@+id/creating_dish">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/heading"
@@ -33,6 +33,6 @@
         android:textSize="@dimen/cooking_text_size_20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heading_type"
-        tools:text="Description" />
+        tools:text="Describe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

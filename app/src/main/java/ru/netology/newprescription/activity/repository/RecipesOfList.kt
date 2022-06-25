@@ -1,6 +1,7 @@
-package ru.netology.newprescription.activity
+package ru.netology.newprescription.activity.repository
 
 import androidx.lifecycle.LiveData
+import ru.netology.newprescription.activity.Recipe
 
 interface RecipesOfList {
 
@@ -15,5 +16,9 @@ interface RecipesOfList {
     fun getRecipeList(): LiveData<List<Recipe>>
 
     fun isFavorite(recipeId: Int)
+
+    fun ingredientsSteps(recipe: Recipe)
+
+    fun cookSteps(recipe: Recipe)
 
 }

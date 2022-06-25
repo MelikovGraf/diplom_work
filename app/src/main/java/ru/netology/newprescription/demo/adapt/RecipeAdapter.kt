@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.RecipeViewFragmentBinding
 import ru.netology.newprescription.activity.Recipe
+import ru.netology.newprescription.demo.adapt.listener.RecipeListListener
 
 class RecipeAdapter(
 
-    private val recipeListener: RecipeListener
+    private val recipeListener: RecipeListListener
 ) : ListAdapter<Recipe, RecipeAdapter.ViewHolder>(DiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +27,7 @@ class RecipeAdapter(
 
     class ViewHolder(
         private val binding: RecipeViewFragmentBinding,
-        private val listener: RecipeListener
+        private val listener: RecipeListListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var recipe: Recipe

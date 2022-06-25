@@ -6,8 +6,20 @@
     app:startDestination="@id/feedFragment">
     <fragment
         android:id="@+id/feedFragment"
-        android:name="ru.netology.newprescription.demo.FeedFragment"
+        android:name="ru.netology.newprescription.demo.userInterface.FeedFragment"
         android:label="FeedFragment"
         tools:layout="@layout/feed_fragment">
+        <action
+            android:id="@+id/to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="ru.netology.newprescription.demo.userInterface.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
     </fragment>
 </navigation>

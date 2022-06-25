@@ -62,7 +62,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="@id/ingredientsButton"
             app:layout_constraintTop_toBottomOf="@id/cookingCompositionButton"
-            tools:listitem="@layout/creating_a_dish" />
+            tools:listitem="@layout/creating_dish" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,8 +1,8 @@
-package ru.netology.newprescription.demo.adapt
+package ru.netology.newprescription.demo.adapt.listener
 
 import ru.netology.newprescription.activity.Recipe
 
-interface RecipeListener {
+interface RecipeListListener {
 
     fun onFavoriteClicked(recipe: Recipe)
 

@@ -4,13 +4,18 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import ru.netology.newprescription.activity.*
+import ru.netology.newprescription.activity.fragment.AddRecipeFragment
+import ru.netology.newprescription.activity.fragment.DeleteRecipeFragment
+import ru.netology.newprescription.activity.fragment.EditRecipeFragment
+import ru.netology.newprescription.activity.fragment.GetRecipeFragment
 import ru.netology.newprescription.data.RecipeRepositoryImpl
-import ru.netology.newprescription.demo.adapt.RecipeListener
+import ru.netology.newprescription.demo.adapt.listener.RecipeListListener
+import ru.netology.newprescription.utils.MultipleDevelopment
 
-class Pattern(
+class ListViewModel(
 
     application: Application
-) : AndroidViewModel(application), RecipeListener {
+) : AndroidViewModel(application), RecipeListListener {
 
     private val repository = RecipeRepositoryImpl
 
@@ -21,6 +26,8 @@ class Pattern(
     private val getRecipeListFragment = GetRecipeListFragment(repository)
 
     val recipeList = getRecipeListFragment.getRecipeList()
+
+    val navigateToRecipeDetailsScreen = MultipleDevelopment<Recipe>()
 
     fun deleteRecipe(recipe: Recipe) {
         deleteRecipeFragment.deleteRecipe(recipe)
@@ -43,8 +50,9 @@ class Pattern(
     override fun onRecipeClicked(recipe: Recipe) {
         Toast.makeText(
             getApplication<Application>().applicationContext,
-            "The author of the recipe ${recipe.author}",
-            Toast.LENGTH_LONG
+            "The author of the recipe ${recipe.id}",
+            Toast.LENGTH_SHORT
         ).show()
+        navigateToRecipeDetailsScreen.value = recipe
     }
 }
