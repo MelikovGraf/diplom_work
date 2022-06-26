@@ -37,9 +37,6 @@ class MainActivity : AppCompatActivity() {
     private val destinationListener =
         NavController.OnDestinationChangedListener { _, destination, _ ->
             supportActionBar?.title = destination.label
-            if (destination.label == "RecipeListFragment") {
-//                TODO()
-            }
         }
 
     private fun onNavControllerActivated(navController: NavController) {

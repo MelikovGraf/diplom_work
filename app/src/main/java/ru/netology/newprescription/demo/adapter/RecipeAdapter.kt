@@ -1,6 +1,7 @@
-package ru.netology.newprescription.demo.adapt
+package ru.netology.newprescription.demo.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.RecipeViewFragmentBinding
 import ru.netology.newprescription.activity.Recipe
-import ru.netology.newprescription.demo.adapt.listener.RecipeListListener
+import ru.netology.newprescription.demo.adapter.listener.RecipeListListener
 
 class RecipeAdapter(
 
@@ -37,7 +38,6 @@ class RecipeAdapter(
                 listener.onRecipeClicked(recipe)
             }
             binding.favoriteButton.setOnClickListener { listener.onFavoriteClicked(recipe) }
-
         }
 
         fun bind(recipe: Recipe) {
@@ -45,16 +45,22 @@ class RecipeAdapter(
             with(binding) {
                 author.text = recipe.author
                 title.text = recipe.title
-                category.text = recipe.type
-                dishTime.text = recipe.dishTime
                 recipeOverview.setImageResource(R.mipmap.ic_dish)
+
+                if (recipe.cuisineCategory == "Unknown category") {
+                    cuisineCategory.visibility = View.GONE
+                } else cuisineCategory.text = recipe.cuisineCategory
+
+                if (recipe.dishTime == null) {
+                    dishTime.visibility = View.GONE
+                } else dishTime.text = recipe.dishTime
+
                 when (recipe.favorite) {
                     true -> favoriteButton.setImageResource(R.drawable.ic_baseline_star_24)
                     false -> favoriteButton.setImageResource(R.drawable.ic_baseline_star_border_24)
                 }
             }
         }
-
     }
 }
 

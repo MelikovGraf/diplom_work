@@ -1,6 +1,7 @@
-package ru.netology.newprescription.demo.adapt
+package ru.netology.newprescription.demo.adapter.display
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.databinding.IngredientsCompositionBinding
 import ru.netology.newprescription.activity.Ingredient
 
-class RecipeIngredients :
-    ListAdapter<Ingredient, RecipeIngredients.IngredientViewHolder>(DiffCallBackIngredient) {
+class RecipeDetailsIngredients :
+    ListAdapter<Ingredient, RecipeDetailsIngredients.IngredientViewHolder>(DiffCallBackIngredient) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,9 +31,9 @@ class RecipeIngredients :
         fun bind(ingredient: Ingredient) {
             this.ingredient = ingredient
             with(binding) {
-                position.text = "${ingredient.id + 1}. "
-                element.text = ingredient.title
-                price.text = ingredient.value
+                ingredientTitle.text = ingredient.title
+                ingredientValue.text = ingredient.value
+                ingredientOptionsButton.visibility = View.GONE
             }
         }
     }

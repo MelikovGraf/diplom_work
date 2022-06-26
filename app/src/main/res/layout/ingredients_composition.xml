@@ -11,43 +11,47 @@
     android:id="@+id/ingredients" >
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/position"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/ingredientTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:ellipsize="end"
-        android:textColor="@color/colorText"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:paddingStart="@dimen/addition_padding"
+        android:paddingEnd="0dp"
         android:textSize="@dimen/base_text_size"
-        android:layout_margin="@dimen/base_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="1. " />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/element"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:textColor="#00008b"
-        android:textSize="@dimen/base_text_size"
-        app:layout_constraintEnd_toStartOf="@id/price"
-        app:layout_constraintStart_toEndOf="@id/position"
-        app:layout_constraintTop_toTopOf="@id/position"
         tools:text="ingredient" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/price"
+        android:id="@+id/ingredientValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/base_margin"
+        android:paddingEnd="@dimen/addition_padding"
+        android:paddingStart="@dimen/addition_padding"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/colorLiked"
         android:textSize="@dimen/base_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/element"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/element"
+        app:layout_constraintBottom_toBottomOf="@id/ingredientTitle"
+        app:layout_constraintEnd_toStartOf="@id/ingredient_options_button"
+        app:layout_constraintTop_toTopOf="@id/ingredientTitle"
         tools:text="price" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ingredient_options_button"
+        style="@style/Widget.AppTheme.IngredientsOptions.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:checkable="false"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

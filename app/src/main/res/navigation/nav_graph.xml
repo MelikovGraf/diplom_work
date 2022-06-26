@@ -12,6 +12,9 @@
         <action
             android:id="@+id/to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/to_recipeConstructorFragment"
+            app:destination="@id/recipeEditorFragment" />
     </fragment>
 
     <fragment
@@ -21,5 +24,35 @@
         <argument
             android:name="recipeId"
             app:argType="integer" />
+        <action
+            android:id="@+id/to_recipeConstructorFragment"
+            app:destination="@id/recipeEditorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeEditorFragment"
+        android:name="ru.netology.newprescription.demo.userInterface.RecipeEditorFragment"
+        android:label="RecipeConstructorFragment"
+        tools:layout="@layout/recipe_editor_fragment">
+
+        <argument
+            android:name="recipe"
+            app:argType="ru.netology.newprescription.activity.Recipe"
+            app:nullable="true" />
+        <action
+            android:id="@+id/to_cookingStageEditorFragment"
+            app:destination="@id/cookingStageEditorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cookingStageEditorFragment"
+        android:name="ru.netology.newprescription.demo.userInterface.CookingStageEditorFragment"
+        android:label="CookingStageEditorFragment"
+        tools:layout="@layout/cooking_stage_editor"
+        >
+        <argument
+            android:name="cookingStage"
+            app:argType="ru.netology.newprescription.activity.CookingStage"
+            app:nullable="true" />
     </fragment>
 </navigation>

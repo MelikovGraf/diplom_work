@@ -1,4 +1,4 @@
-package ru.netology.newprescription.demo.adapt.listener
+package ru.netology.newprescription.demo.adapter.listener
 
 import ru.netology.newprescription.activity.Recipe
 
@@ -9,6 +9,8 @@ interface RecipeListListener {
     fun onRecipeClicked(recipe: Recipe)
 
     fun onSearchClicked(request: String)
+
+    fun onAddClicked()
 
     fun onCancelClicked()
 

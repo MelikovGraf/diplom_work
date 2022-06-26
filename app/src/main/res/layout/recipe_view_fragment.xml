@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/base_padding"
-    android:id="@+id/recipe_view" >
+    android:id="@+id/recipe_preview" >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recipe_overview"
@@ -18,7 +18,7 @@
         tools:src="@drawable/muhammara" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/category"
+        android:id="@+id/cuisine_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/base_margin"
@@ -40,7 +40,7 @@
         android:layout_margin="@dimen/base_margin"
         android:background="@drawable/round"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="center_vertical|center_horizontal"
         android:maxLines="2"
         android:textColor="@color/colorText"
         android:textSize="@dimen/cooking_time_size"

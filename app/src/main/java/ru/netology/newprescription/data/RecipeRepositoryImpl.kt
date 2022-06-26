@@ -6,11 +6,12 @@ import ru.netology.newprescription.activity.CookingStage
 import ru.netology.newprescription.activity.Ingredient
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.activity.repository.RecipesOfList
+import ru.netology.newprescription.utils.ContentRecipe
 import kotlin.random.Random
 
 object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
 
-    private const val RECIPE_COUNT = 5
+    private const val RECIPE_COUNT = 10
     private const val INGREDIENTS_COUNT = 5
     private const val COOKING_COUNT = 5
 
@@ -25,7 +26,8 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
             val newRecipe = Recipe(
                 title = "Recipe №$r",
                 author = "Favourites",
-                type = "Oriental cuisine",
+                authorId = Random.nextInt(1, 5),
+                cuisineCategory = ContentRecipe.getRandomCuisineCategory(),
                 dishTime = "0h\n50min",
                 ingredientsList =
                 List(INGREDIENTS_COUNT) {
@@ -37,7 +39,7 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
                 },
                 cookingList =
                 List(COOKING_COUNT) {
-                    CookingStage("Description $it", it)
+                    CookingStage("Description $it", null, it)
                 }
             )
             addRecipe(newRecipe)
