@@ -4,6 +4,10 @@
     <string name="recipe_list">Recipe list</string>
     <string name="recipe_details">Recipe details</string>
 
+    <!-- Ingredient constructor fragment -->
+    <string name="ingredient_name">Ingredient</string>
+    <string name="ingredient_value">Value</string>
+
     <!-- Top app bar menu -->
     <string name="search">Search</string>
     <string name="filter">Filter</string>
@@ -19,8 +23,29 @@
     <string name="my_recipes">My recipes</string>
     <string name="favorites">Favorites</string>
 
+    <!-- Ingredients and cooking instruction list menu -->
+    <string name="shift_up">Shift up</string>
+    <string name="shift_down">Shift down</string>
+    <string name="delete_item">Delete</string>
+    <string name="edit_item">Edit</string>
 
+    <!-- Kitchen category menu  -->
+    <string name="european">European</string>
+    <string name="asian">Asian</string>
+    <string name="pan_asian">Pan-Asian</string>
+    <string name="eastern">Eastern</string>
+    <string name="american">American</string>
+    <string name="russian">Russian</string>
+    <string name="mediterranean">Mediterranean</string>
+    <string name="unknown_category">Unknown category</string>
+
+
+    <string name="stage">Stage %1$d </string>
     <string name="add_recipe">Add recipe</string>
+    <string name="add_ingredient">Add ingredient</string>
+    <string name="save_ingredient">Save ingredient</string>
+    <string name="add_cooking_stage">Add cooking stage</string>
     <string name="ingredients_composition">Ingredients composition</string>
-    <string name="how_to_cook">How to cook</string>
+    <string name="how_to_cook">How to cook</string>x
+    <string name="OK">OK</string>
 </resources>

@@ -5,7 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import ru.netology.newprescription.data.RecipeRepositoryImpl
 import ru.netology.newprescription.activity.*
 import ru.netology.newprescription.activity.fragment.*
-import ru.netology.newprescription.demo.adapt.listener.RecipeDetailsInteractionListener
+import ru.netology.newprescription.demo.adapter.listener.RecipeDetailsInteractionListener
+import ru.netology.newprescription.utils.MultipleDevelopment
 
 class DetailsViewModel(
 
@@ -14,14 +15,13 @@ class DetailsViewModel(
 
     private val repository = RecipeRepositoryImpl
 
-    private val addRecipeItemUseCase = AddRecipeFragment(repository)
     private val deleteRecipeItemUseCase = DeleteRecipeFragment(repository)
     private val editRecipeItemUseCase = EditRecipeFragment(repository)
-    private val getRecipeItemUseCase = GetRecipeFragment(repository)
     private val getRecipeListUseCase = GetRecipeListFragment(repository)
 
     val recipeList = getRecipeListUseCase.getRecipeList()
 
+    val navigateToRecipeEditorScreen = MultipleDevelopment<Recipe>()
 
     fun deleteRecipe(recipe: Recipe) {
         deleteRecipeItemUseCase.deleteRecipe(recipe)
@@ -31,25 +31,17 @@ class DetailsViewModel(
         editRecipeItemUseCase.editRecipe(recipe)
     }
 
-    fun addRecipe(recipe: Recipe) {
-        addRecipeItemUseCase.addRecipe(recipe)
-    }
-
-    fun getRecipe(recipeId: Int): Recipe {
-        return getRecipeItemUseCase.getRecipe(recipeId)
-    }
-
-    fun getRecipeIngredients(recipe: Recipe): List<Ingredient> {
-        return recipe.ingredientsList
-    }
-
-    fun getRecipeCookSteps(recipe: Recipe): List<CookingStage> {
-        return recipe.cookingList
-    }
-
     override fun onFavoriteClicked(recipe: Recipe) = repository.isFavorite(recipe.id)
 
     override fun onIngredientsShowClicked(recipe: Recipe) = repository.ingredientsSteps(recipe)
 
     override fun onCookStepsShowClicked(recipe: Recipe) = repository.cookSteps(recipe)
+
+    override fun onDeleteClicked(recipe: Recipe) {
+        deleteRecipe(recipe)
+    }
+
+    override fun onEditClicked(recipe: Recipe) {
+        navigateToRecipeEditorScreen.value = recipe
+    }
 }

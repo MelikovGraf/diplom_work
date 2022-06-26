@@ -5,11 +5,14 @@ import android.view.*
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.netology.newprescription.R
+import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.databinding.FeedFragmentBinding
-import ru.netology.newprescription.demo.adapt.RecipeAdapter
+import ru.netology.newprescription.demo.adapter.RecipeAdapter
 import ru.netology.newprescription.demo.viewModel.ListViewModel
 
 class FeedFragment : Fragment() {
@@ -20,8 +23,21 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        setFragmentResultListener(requestKey = RecipeEditorFragment.ORDER_KEY) { requestKey, bundle ->
+            if (requestKey !== RecipeEditorFragment.ORDER_KEY) return@setFragmentResultListener
+            val newRecipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_NEW_STAGE)
+            if (newRecipe != null)
+                viewModel.addRecipe(newRecipe)
+        }
+
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
             val direction = FeedFragmentDirections.toDetailsFragment(recipe.id)
+            findNavController().navigate(direction)
+        }
+
+        viewModel.navigateToRecipeEditorScreen.observe(this) { recipe ->
+            val direction = FeedFragmentDirections.toRecipeConstructorFragment(recipe)
             findNavController().navigate(direction)
         }
     }
@@ -35,8 +51,36 @@ class FeedFragment : Fragment() {
 
         binding.recipeRecyclerView.adapter = adapter
 
-        viewModel.recipeList.observe(viewLifecycleOwner) { recipe ->
-            adapter.submitList(recipe)
+        viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
+            val myId = 2
+            when (binding.bottomNavigation.selectedItemId) {
+                R.id.all_recipes -> adapter.submitList(recipeList)
+                R.id.my_recipes -> adapter.submitList(recipeList.filter { it.authorId == myId })
+                R.id.favorite_recipes -> adapter.submitList(recipeList.filter { it.favorite })
+                else -> adapter.submitList(recipeList)
+            }
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.all_recipes -> {
+                    requireActivity().invalidateOptionsMenu()
+                    adapter.submitList(viewModel.recipeList.value)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.my_recipes -> {
+                    requireActivity().invalidateOptionsMenu()
+                    val myId = 2
+                    adapter.submitList(viewModel.recipeList.value?.filter { it.authorId == myId })
+                    return@setOnItemSelectedListener true
+                }
+                R.id.favorite_recipes -> {
+                    requireActivity().invalidateOptionsMenu()
+                    adapter.submitList(viewModel.recipeList.value?.filter { it.favorite })
+                    return@setOnItemSelectedListener true
+                }
+            }
+            return@setOnItemSelectedListener false
         }
     }.root
 
@@ -47,11 +91,20 @@ class FeedFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
+        val bottomNavigationView =
+            activity?.findViewById(R.id.bottomNavigation) as BottomNavigationView
         with(menu) {
-            findItem(R.id.add_button).isVisible = false
             findItem(R.id.edit_button).isVisible = false
             findItem(R.id.delete_button).isVisible = false
-            findItem(R.id.search_button).isVisible = true
+            findItem(R.id.ok_button).isVisible = false
+            when (bottomNavigationView.selectedItemId) {
+                R.id.my_recipes -> {
+                    findItem(R.id.add_button).isVisible = true
+                }
+                R.id.all_recipes, R.id.favorite_recipes -> {
+                    findItem(R.id.add_button).isVisible = false
+                }
+            }
             when (toolBarEditText.visibility) {
                 View.VISIBLE -> {
                     findItem(R.id.filter_button).isVisible = false
@@ -86,6 +139,7 @@ class FeedFragment : Fragment() {
                 }
                 true
             }
+
             R.id.cancel_button -> {
                 toolBarEditText.text.clear()
                 toolBarEditText.visibility = View.GONE
@@ -93,6 +147,12 @@ class FeedFragment : Fragment() {
                 requireActivity().invalidateOptionsMenu()
                 true
             }
+
+            R.id.add_button -> {
+                viewModel.onAddClicked()
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

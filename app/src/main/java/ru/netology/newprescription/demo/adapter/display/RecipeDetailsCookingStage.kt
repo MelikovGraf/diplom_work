@@ -1,6 +1,7 @@
-package ru.netology.newprescription.demo.adapt
+package ru.netology.newprescription.demo.adapter.display
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.databinding.CreatingDishBinding
 import ru.netology.newprescription.activity.CookingStage
 
-class RecipeCookingStage :
-    ListAdapter<CookingStage, RecipeCookingStage.CookingStepsViewHolder>(ReverseCookingStage) {
+class RecipeDetailsCookingStage :
+    ListAdapter<CookingStage, RecipeDetailsCookingStage.CookingStepsViewHolder>(ReverseCookingStage) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CookingStepsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,8 +31,12 @@ class RecipeCookingStage :
         fun bind(cookingStage: CookingStage) {
             this.cookingStage = cookingStage
             with(binding) {
-                headingViewing.text = cookingStage.descript
-                heading.text = "Step ${cookingStage.id + 1}"
+                cookingStageDescription.text = cookingStage.descript
+                stage.text = "Stage ${adapterPosition + 1}"
+                if (cookingStage.uri == null) {
+                    stagePreview.visibility = View.GONE
+                }
+                cookingStageOptions.visibility = View.GONE
             }
         }
     }

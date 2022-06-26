@@ -8,31 +8,45 @@
     android:id="@+id/creating_dish">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/heading"
+        android:id="@+id/stage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="@dimen/cooking_text_size_32sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Step 1" />
+        tools:text="Stage 1" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/heading_type"
+        android:id="@+id/stage_preview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/step_height"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/heading"
+        app:layout_constraintTop_toBottomOf="@id/stage"
         tools:src="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/heading_viewing"
+        android:id="@+id/cooking_stage_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/cooking_text_size_20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/heading_type"
+        app:layout_constraintTop_toBottomOf="@id/stage_preview"
         tools:text="Describe" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cooking_stage_options"
+        style="@style/Widget.AppTheme.IngredientsOptions.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:checkable="false"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:iconTint="@color/black"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/stage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
