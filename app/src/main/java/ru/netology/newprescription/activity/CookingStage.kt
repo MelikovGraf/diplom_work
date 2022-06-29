@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class CookingStage(
     val descript: String,
     val uri: String? = null,
+    val stageImageURL: String? = null,
     val id: Int = UNDEFINED_ID
 
 ):Parcelable {

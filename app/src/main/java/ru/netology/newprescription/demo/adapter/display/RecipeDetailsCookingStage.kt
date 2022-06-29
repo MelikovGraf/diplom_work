@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.CreatingDishBinding
 import ru.netology.newprescription.activity.CookingStage
 
@@ -33,8 +35,15 @@ class RecipeDetailsCookingStage :
             with(binding) {
                 cookingStageDescription.text = cookingStage.descript
                 stage.text = "Stage ${adapterPosition + 1}"
-                if (cookingStage.uri == null) {
+                if (cookingStage.stageImageURL == null) {
                     stagePreview.visibility = View.GONE
+                } else {
+                    stagePreview.visibility = View.VISIBLE
+                    Glide.with(binding.stagePreview)
+                        .asDrawable()
+                        .load(cookingStage.stageImageURL)
+                        .error(R.mipmap.ic_launcher)
+                        .into(binding.stagePreview)
                 }
                 cookingStageOptions.visibility = View.GONE
             }

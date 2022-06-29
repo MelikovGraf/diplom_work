@@ -12,6 +12,7 @@ data class Recipe(
     val dishTime: String?,
     val ingredientsList: List<Ingredient>,
     val cookingList: List<CookingStage>,
+    val previewURL: String? = null,
     val isIngredients: Boolean = false,
     val isCookingSteps: Boolean = false,
     val favorite: Boolean = false,

@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/feedFragment"
         android:name="ru.netology.newprescription.demo.userInterface.FeedFragment"
-        android:label="FeedFragment"
+        android:label="ListFragment"
         tools:layout="@layout/feed_fragment">
         <action
             android:id="@+id/to_detailsFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/recipeEditorFragment"
         android:name="ru.netology.newprescription.demo.userInterface.RecipeEditorFragment"
-        android:label="RecipeConstructorFragment"
+        android:label="EditorFragment"
         tools:layout="@layout/recipe_editor_fragment">
 
         <argument
