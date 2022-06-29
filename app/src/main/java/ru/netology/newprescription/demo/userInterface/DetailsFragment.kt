@@ -9,6 +9,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import ru.netology.newprescription.R
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.databinding.RecipeFunctionsFragmentBinding
@@ -57,6 +58,15 @@ class DetailsFragment : Fragment() {
             with(binding) {
                 recipeItems.author.text = recipe.author
                 recipeItems.title.text = recipe.title
+                if (recipe.previewURL !== null) {
+                    Glide.with(this@DetailsFragment)
+                        .asDrawable()
+                        .load(recipe.previewURL)
+                        .error(R.drawable.ic_baseline_image_not_supported_24)
+                        .into(recipeItems.recipeOverview)
+                } else {
+                    recipeItems.recipeOverview.setImageResource(R.drawable.ic_baseline_image_not_supported_24)
+                }
                 if (recipe.cuisineCategory == "Unknown category") {
                     recipeItems.cuisineCategory.visibility = View.GONE
                 } else recipeItems.cuisineCategory.text = recipe.cuisineCategory
@@ -127,7 +137,7 @@ class DetailsFragment : Fragment() {
         with(menu) {
             findItem(R.id.search_button).isVisible = false
             findItem(R.id.filter_button).isVisible = false
-            findItem(R.id.cancel_button).isVisible = false
+            findItem(R.id.clear_button).isVisible = false
             findItem(R.id.add_button).isVisible = false
             findItem(R.id.ok_button).isVisible = false
             val myId = 2

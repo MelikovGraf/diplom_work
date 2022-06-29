@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.CreatingDishBinding
 import ru.netology.newprescription.activity.CookingStage
@@ -58,8 +59,15 @@ class CookingInstructionStepsAdapter(
             cookingStageOptions.tag = cookingStage
             stage.text = context.getString(R.string.stage, position + 1)
             cookingStageDescription.text = cookingStage.descript
-            if (cookingStage.uri == null) {
+            if (cookingStage.stageImageURL == null) {
                 stagePreview.visibility = View.GONE
+            } else {
+                stagePreview.visibility = View.VISIBLE
+                Glide.with(holder.binding.stagePreview)
+                    .asDrawable()
+                    .load(cookingStage.stageImageURL)
+                    .error(R.drawable.ic_baseline_image_not_supported_24)
+                    .into(holder.binding.stagePreview)
             }
             cookingStageOptions.visibility = View.VISIBLE
         }

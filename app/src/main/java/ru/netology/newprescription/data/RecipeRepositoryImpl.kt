@@ -39,8 +39,13 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
                 },
                 cookingList =
                 List(COOKING_COUNT) {
-                    CookingStage("Description $it", null, it)
-                }
+                    CookingStage(
+                        descript = "Description $it",
+                        stageImageURL = ContentRecipe.setRandomCookingStepImage(),
+                        id = it
+                    )
+                },
+                previewURL = ContentRecipe.setRandomImagePreview()
             )
             addRecipe(newRecipe)
         }
