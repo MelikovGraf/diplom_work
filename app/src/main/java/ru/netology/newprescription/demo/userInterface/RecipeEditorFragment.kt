@@ -2,8 +2,10 @@ package ru.netology.newprescription.demo.userInterface
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -48,7 +50,36 @@ class RecipeEditorFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeEditorFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            clearCache()
+            findNavController().popBackStack()
+        }
+
         val recipe = args.recipe
+
+        Log.d("TAG",args.toString())
+
+        if (recipe !== null) {
+            ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
+            cookingStepsService.setCookingStepsList(recipe.cookingList as MutableList<CookingStage>)
+            binding.title.setText(recipe.title)
+            binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.dishTime))
+            binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.dishTime))
+            binding.kitchenCategoryTitle.text = recipe.cuisineCategory
+            if (recipe.previewURL !== null) {
+                binding.addPreviewButton.visibility = View.GONE
+                binding.clearPreviewButton.visibility = View.VISIBLE
+                Glide.with(this)
+                    .asDrawable()
+                    .load(recipe.previewURL)
+                    .error(R.drawable.ic_baseline_image_not_supported_24)
+                    .into(binding.recipePreview)
+            } else {
+                binding.recipePreview.setImageResource(R.drawable.ic_baseline_image_not_supported_24)
+                binding.addPreviewButton.visibility = View.VISIBLE
+                binding.clearPreviewButton.visibility = View.GONE
+            }
+        }
 
         val ingredientsAdapter = IngredientsAdapter(object : IngredientActionListener {
             override fun onIngredientUp(ingredient: Ingredient, moveBy: Int) {
@@ -94,28 +125,6 @@ class RecipeEditorFragment : Fragment() {
                     }
                 })
             }
-
-        if (recipe !== null) {
-            ingredientService.setIngredientsList(recipe.ingredientsList)
-            cookingStepsService.setCookingStepsList(recipe.cookingList)
-            binding.title.setText(recipe.title)
-            binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.dishTime))
-            binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.dishTime))
-            binding.kitchenCategoryTitle.text = recipe.cuisineCategory
-            if (recipe.previewURL !== null) {
-                binding.addPreviewButton.visibility = View.GONE
-                binding.clearPreviewButton.visibility = View.VISIBLE
-                Glide.with(this)
-                    .asDrawable()
-                    .load(recipe.previewURL)
-                    .error(R.drawable.ic_baseline_image_not_supported_24)
-                    .into(binding.recipePreview)
-            } else {
-                binding.recipePreview.setImageResource(R.drawable.ic_baseline_image_not_supported_24)
-                binding.addPreviewButton.visibility = View.VISIBLE
-                binding.clearPreviewButton.visibility = View.GONE
-            }
-        }
 
         binding.ingredientEditGroup.visibility = View.GONE
 
@@ -245,13 +254,14 @@ class RecipeEditorFragment : Fragment() {
                     ),
                     ingredientsList = IngredientService.getIngredients(),
                     cookingList = CookingStageService.getCookingSteps(),
-                    previewURL = null,
+                    previewURL = args.recipe?.previewURL,
                     isIngredients = false,
                     isCookingSteps = false,
                     favorite = false
 
                 )
                 if (checkRecipeForEmptyFields(newRecipe)) {
+                    clearCache()
                     resultBundle.putParcelable(RESULT_KEY_NEW_STAGE, newRecipe)
                     setFragmentResult(ORDER_KEY, resultBundle)
                     findNavController().popBackStack()
@@ -259,6 +269,7 @@ class RecipeEditorFragment : Fragment() {
                 true
             }
             R.id.clear_button -> {
+                clearCache()
                 findNavController().popBackStack()
                 true
             }
@@ -290,6 +301,12 @@ class RecipeEditorFragment : Fragment() {
             value,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun clearCache(){
+        ingredientService.targetIngredient = null
+        ingredientService.setIngredientsList(mutableListOf())
+        cookingStepsService.setCookingStepsList(mutableListOf())
     }
 
     companion object {

@@ -26,16 +26,8 @@ class DetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        setFragmentResultListener(requestKey = RecipeEditorFragment.ORDER_KEY) { requestKey, bundle ->
-            if (requestKey !== RecipeEditorFragment.ORDER_KEY) return@setFragmentResultListener
-            val recipe =
-                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_NEW_STAGE)
-            if (recipe != null)
-                viewModel.editRecipe(recipe)
-        }
-
         viewModel.navigateToRecipeEditorScreen.observe(this) { recipe ->
-            val direction = DetailsFragmentDirections.toRecipeConstructorFragment(recipe)
+            val direction = DetailsFragmentDirections.toRecipeEditorFragment(recipe)
             findNavController().navigate(direction)
         }
     }
@@ -46,10 +38,17 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeFunctionsFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
+        setFragmentResultListener(requestKey = RecipeEditorFragment.ORDER_KEY) { requestKey, bundle ->
+            if (requestKey !== RecipeEditorFragment.ORDER_KEY) return@setFragmentResultListener
+            val recipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_NEW_STAGE)
+            if (recipe != null)
+                viewModel.editRecipe(recipe)
+        }
+
         val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (toolBarEditText.text.isNotEmpty()) toolBarEditText.visibility = View.VISIBLE
             findNavController().popBackStack()
         }
 

@@ -84,7 +84,7 @@ class CookingStageEditorFragment : Fragment() {
             if (!newDescription.isNullOrBlank()) {
                 val step = CookingStage(
                     descript = newDescription.toString(),
-                    stageImageURL = null,
+                    stageImageURL = args.value.cookingStage?.stageImageURL,
                     id = args.value.cookingStage?.id ?: -1
                 )
                 cookingStepService.addCookingStep(step)
