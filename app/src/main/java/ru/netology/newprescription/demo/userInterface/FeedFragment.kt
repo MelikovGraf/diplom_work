@@ -23,13 +23,6 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        setFragmentResultListener(requestKey = RecipeEditorFragment.ORDER_KEY) { requestKey, bundle ->
-            if (requestKey !== RecipeEditorFragment.ORDER_KEY) return@setFragmentResultListener
-            val newRecipe =
-                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_NEW_STAGE)
-            if (newRecipe != null)
-                viewModel.addRecipe(newRecipe)
-        }
 
         viewModel.navigateToRecipeDetailsScreen.observe(this) { recipe ->
             val direction = FeedFragmentDirections.toDetailsFragment(recipe.id)
@@ -37,7 +30,7 @@ class FeedFragment : Fragment() {
         }
 
         viewModel.navigateToRecipeEditorScreen.observe(this) { recipe ->
-            val direction = FeedFragmentDirections.toRecipeConstructorFragment(recipe)
+            val direction = FeedFragmentDirections.toRecipeEditorFragment(recipe)
             findNavController().navigate(direction)
         }
     }
@@ -47,6 +40,15 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FeedFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
+
+        setFragmentResultListener(requestKey = RecipeEditorFragment.ORDER_KEY) { requestKey, bundle ->
+            if (requestKey !== RecipeEditorFragment.ORDER_KEY) return@setFragmentResultListener
+            val newRecipe =
+                bundle.getParcelable<Recipe>(RecipeEditorFragment.RESULT_KEY_NEW_STAGE)
+            if (newRecipe != null)
+                viewModel.addRecipe(newRecipe)
+        }
+
         val adapter = RecipeAdapter(viewModel)
 
         binding.recipeRecyclerView.adapter = adapter
@@ -54,6 +56,10 @@ class FeedFragment : Fragment() {
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val myId = 2
             var recipes = recipeList
+
+            if (recipeList.isEmpty()) binding.noResults.visibility = View.VISIBLE
+            else binding.noResults.visibility = View.GONE
+
             when (binding.bottomNavigation.selectedItemId) {
                 R.id.all_recipes -> {
                     adapter.submitList(recipes)
@@ -69,7 +75,10 @@ class FeedFragment : Fragment() {
                     adapter.submitList(recipes)
                     if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
                 }
-                else -> adapter.submitList(recipeList)
+                else -> {
+                    adapter.submitList(recipeList)
+                    binding.noResults.visibility = View.GONE
+                }
             }
         }
 

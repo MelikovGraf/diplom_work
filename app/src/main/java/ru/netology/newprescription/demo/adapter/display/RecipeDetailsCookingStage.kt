@@ -42,7 +42,7 @@ class RecipeDetailsCookingStage :
                     Glide.with(binding.stagePreview)
                         .asDrawable()
                         .load(cookingStage.stageImageURL)
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher_recipe)
                         .into(binding.stagePreview)
                 }
                 cookingStageOptions.visibility = View.GONE

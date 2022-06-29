@@ -38,7 +38,7 @@ class ListViewModel(
     override fun onSearchClicked(request: String) = repository.searchRecipe(request)
 
     override fun onAddClicked() {
-        navigateToRecipeEditorScreen.call()
+        navigateToRecipeEditorScreen.value = null
     }
 
     override fun onCancelClicked() = repository.searchRecipe(RecipesOfList.CANCEL_SEARCH)

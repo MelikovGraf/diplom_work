@@ -13,7 +13,7 @@
             android:id="@+id/to_detailsFragment"
             app:destination="@id/detailsFragment" />
         <action
-            android:id="@+id/to_recipeConstructorFragment"
+            android:id="@+id/to_recipeEditorFragment"
             app:destination="@id/recipeEditorFragment" />
     </fragment>
 
@@ -25,7 +25,7 @@
             android:name="recipeId"
             app:argType="integer" />
         <action
-            android:id="@+id/to_recipeConstructorFragment"
+            android:id="@+id/to_recipeEditorFragment"
             app:destination="@id/recipeEditorFragment" />
     </fragment>
 

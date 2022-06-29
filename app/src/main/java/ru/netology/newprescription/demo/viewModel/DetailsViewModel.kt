@@ -21,7 +21,7 @@ class DetailsViewModel(
 
     val recipeList = getRecipeListUseCase.getRecipeList()
 
-    val navigateToRecipeEditorScreen = MultipleDevelopment<Recipe>()
+    val navigateToRecipeEditorScreen = MultipleDevelopment<Recipe?>()
 
     fun deleteRecipe(recipe: Recipe) {
         deleteRecipeItemUseCase.deleteRecipe(recipe)

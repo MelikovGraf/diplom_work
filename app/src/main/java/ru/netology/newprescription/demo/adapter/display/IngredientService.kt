@@ -17,8 +17,8 @@ object IngredientService {
         return ingredients
     }
 
-    fun setIngredientsList(ingredientList: List<Ingredient>) {
-        ingredients = ingredientList as MutableList<Ingredient>
+    fun setIngredientsList(ingredientList: MutableList<Ingredient>) {
+        ingredients = ingredientList
     }
 
     fun deleteIngredient(ingredient: Ingredient) {
