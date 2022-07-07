@@ -41,11 +41,11 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
                 List(COOKING_COUNT) {
                     CookingStage(
                         descript = "Description $it",
-                        stageImageURL = ContentRecipe.setRandomCookingStepImage(),
+                        stageImageUri = ContentRecipe.setRandomCookingStepImage(),
                         id = it
                     )
                 },
-                previewURL = ContentRecipe.setRandomImagePreview()
+                previewUri = ContentRecipe.setRandomImagePreview()
             )
             addRecipe(newRecipe)
         }
@@ -89,20 +89,6 @@ object RecipeRepositoryImpl : RecipesOfList { // Список рецептов
             orderedRecipeList.replaceAll { if (it.id == recipeId) it.copy(favorite = !it.favorite) else it }
             updateList(isSorted = true)
         }
-    }
-
-    override fun ingredientsSteps(recipe: Recipe) {
-        recipeList.replaceAll {
-            if (it.id == recipe.id) it.copy(isIngredients = !it.isIngredients) else it
-        }
-        updateList(isSorted = false)
-    }
-
-    override fun cookSteps(recipe: Recipe) {
-        recipeList.replaceAll {
-            if (it.id == recipe.id) it.copy(isCookingSteps = !it.isCookingSteps) else it
-        }
-        updateList(isSorted = false)
     }
 
     override fun searchRecipe(request: String) {

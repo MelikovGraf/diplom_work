@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import ru.netology.newprescription.R
+import ru.netology.newprescription.activity.Cuisine
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.databinding.RecipeFunctionsFragmentBinding
 import ru.netology.newprescription.demo.adapter.display.RecipeDetailsCookingStage
@@ -46,8 +47,6 @@ class DetailsFragment : Fragment() {
                 viewModel.editRecipe(recipe)
         }
 
-        val toolBarEditText = activity?.findViewById(R.id.toolBarEditText) as EditText
-
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             findNavController().popBackStack()
         }
@@ -57,16 +56,16 @@ class DetailsFragment : Fragment() {
             with(binding) {
                 recipeItems.author.text = recipe.author
                 recipeItems.title.text = recipe.title
-                if (recipe.previewURL !== null) {
+                if (recipe.previewUri !== null) {
                     Glide.with(this@DetailsFragment)
                         .asDrawable()
-                        .load(recipe.previewURL)
+                        .load(recipe.previewUri)
                         .error(R.drawable.ic_baseline_image_not_supported_24)
                         .into(recipeItems.recipeOverview)
                 } else {
                     recipeItems.recipeOverview.setImageResource(R.drawable.ic_baseline_image_not_supported_24)
                 }
-                if (recipe.cuisineCategory == "Unknown category") {
+                if (recipe.cuisineCategory == Cuisine.selectedKitchenList.last().title) {
                     recipeItems.cuisineCategory.visibility = View.GONE
                 } else recipeItems.cuisineCategory.text = recipe.cuisineCategory
                 if (recipe.dishTime == null) {
@@ -87,34 +86,24 @@ class DetailsFragment : Fragment() {
                 binding.cookingCompositionView.adapter = cookingStepsAdapter
                 cookingStepsAdapter.submitList(recipe.cookingList)
 
-                when (recipe.isIngredients) {
-                    true -> {
-                        ingredientView.visibility = View.VISIBLE
-                        ingredientsButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
-                    }
-                    false -> {
-                        ingredientView.visibility = View.GONE
-                        ingredientsButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
-                    }
-                }
-
-                when (recipe.isCookingSteps) {
-                    true -> {
+                cookingCompositionButton.setOnClickListener {
+                    if (cookingCompositionView.visibility == View.VISIBLE) {
+                        cookingCompositionView.visibility = View.GONE
+                        cookingCompositionButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
+                    } else {
                         cookingCompositionView.visibility = View.VISIBLE
                         cookingCompositionButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
                     }
-                    false -> {
-                        cookingCompositionView.visibility = View.GONE
-                        cookingCompositionButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
-                    }
-                }
-
-                cookingCompositionButton.setOnClickListener {
-                    viewModel.onCookStepsShowClicked(recipe)
                 }
 
                 ingredientsButton.setOnClickListener {
-                    viewModel.onIngredientsShowClicked(recipe)
+                    if (ingredientView.visibility == View.VISIBLE) {
+                        ingredientView.visibility = View.GONE
+                        ingredientsButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
+                    } else {
+                        ingredientView.visibility = View.VISIBLE
+                        ingredientsButton.setIconResource(R.drawable.ic_baseline_keyboard_arrow_up_24)
+                    }
                 }
 
                 recipeItems.favoriteButton.setOnClickListener {

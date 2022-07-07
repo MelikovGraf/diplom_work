@@ -1,6 +1,7 @@
 package ru.netology.newprescription.demo.userInterface
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -8,6 +9,7 @@ import android.widget.*
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -19,12 +21,14 @@ import ru.netology.newprescription.databinding.RecipeEditorFragmentBinding
 import ru.netology.newprescription.activity.Ingredient
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.demo.adapter.display.*
+import ru.netology.newprescription.demo.adapter.listener.CookingStageActionListener
+import ru.netology.newprescription.demo.adapter.listener.IngredientActionListener
 import ru.netology.newprescription.utils.CookingTimeConverter
 
 
 class RecipeEditorFragment : Fragment() {
 
-    private val args by navArgs<RecipeEditorFragmentArgs>()  // recipe or null
+    private val args by navArgs<RecipeEditorFragmentArgs>()
 
     private val ingredientService: IngredientService = IngredientService
     private val cookingStepsService: CookingStageService = CookingStageService
@@ -32,8 +36,10 @@ class RecipeEditorFragment : Fragment() {
     private var selectedRecipePreviewImageUri: Uri? = null
 
     private val selectImages: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri: Uri ->
+        registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri: Uri? ->
             selectedRecipePreviewImageUri = imageUri
+            imageRecipePreviewUri = imageUri
+            imageRecipePreviewTag = null
             view?.findViewById<ImageView>(R.id.recipe_preview)?.setImageURI(imageUri)
             view?.findViewById<ImageButton>(R.id.add_preview_button)?.visibility = View.GONE
             view?.findViewById<ImageButton>(R.id.clear_preview_button)?.visibility = View.VISIBLE
@@ -52,12 +58,12 @@ class RecipeEditorFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             clearCache()
+            imageRecipePreviewUri = null
+            imageRecipePreviewTag = null
             findNavController().popBackStack()
         }
 
         val recipe = args.recipe
-
-        Log.d("TAG",args.toString())
 
         if (recipe !== null) {
             ingredientService.setIngredientsList(recipe.ingredientsList as MutableList<Ingredient>)
@@ -66,12 +72,13 @@ class RecipeEditorFragment : Fragment() {
             binding.cookingTimeHours.setText(CookingTimeConverter.convertToHours(recipe.dishTime))
             binding.cookingTimeMinutes.setText(CookingTimeConverter.convertToMinutes(recipe.dishTime))
             binding.kitchenCategoryTitle.text = recipe.cuisineCategory
-            if (recipe.previewURL !== null) {
+            if (recipe.previewUri !== null) {
+                imageRecipePreviewTag = null
                 binding.addPreviewButton.visibility = View.GONE
                 binding.clearPreviewButton.visibility = View.VISIBLE
                 Glide.with(this)
                     .asDrawable()
-                    .load(recipe.previewURL)
+                    .load(recipe.previewUri)
                     .error(R.drawable.ic_baseline_image_not_supported_24)
                     .into(binding.recipePreview)
             } else {
@@ -105,7 +112,7 @@ class RecipeEditorFragment : Fragment() {
 
         val cookingInstructionStepsAdapter =
             this.context?.let {
-                CookingInstructionStepsAdapter(it, object : CookingInstructionAction {
+                CookingInstructionStepsAdapter(it, object : CookingStageActionListener {
                     override fun onCookingStageUp(cookingStage: CookingStage, moveBy: Int) {
                         cookingStepsService.moveCookingStep(cookingStage, moveBy)
                     }
@@ -145,6 +152,8 @@ class RecipeEditorFragment : Fragment() {
             binding.addPreviewButton.visibility = View.VISIBLE
             binding.clearPreviewButton.visibility = View.GONE
             binding.recipePreview.setImageResource(R.drawable.ic_baseline_image_not_supported_24)
+            imageRecipePreviewUri = null
+            imageRecipePreviewTag = imageRecipePreviewIsEmptyTag
         }
 
         binding.addPreviewButton.setOnClickListener {
@@ -156,7 +165,9 @@ class RecipeEditorFragment : Fragment() {
             binding.newIngredientValueEditText.text.clear()
             binding.addIngredientButton.text = getString(R.string.add_ingredient)
             binding.ingredientEditGroup.visibility = View.GONE
+            imageRecipePreviewUri = null
         }
+
         binding.kitchenCategoryButton.setOnClickListener {
             PopupMenu(binding.root.context, binding.kitchenCategoryButton).apply {
                 inflate(R.menu.dish_category_menu)
@@ -166,12 +177,12 @@ class RecipeEditorFragment : Fragment() {
                 }
             }.show()
         }
+
         binding.addIngredientButton.setOnClickListener {
             val ingredientEditGroupVisibility = binding.ingredientEditGroup.visibility
             val targetIngredient =
-                ingredientService.targetIngredient // notnull means ingredient edit mode
+                ingredientService.targetIngredient
 
-            // too much if coz of hard logic
             if (ingredientEditGroupVisibility == View.GONE) {
                 binding.ingredientEditGroup.visibility = View.VISIBLE
                 binding.addIngredientButton.text = getString(R.string.save_ingredient)
@@ -238,15 +249,17 @@ class RecipeEditorFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val binding = RecipeEditorFragmentBinding.inflate(layoutInflater)
         return when (item.itemId) {
             R.id.ok_button -> {
                 val resultBundle = Bundle(1)
                 val newRecipe = Recipe(
                     id = if (args.recipe !== null) args.recipe!!.id else -1,
                     title = view?.findViewById<EditText>(R.id.title)?.text.toString(),
-                    author = "Me", //TODO account name
-                    authorId = 2, //TODO account id
+                    author = "Unknown",
+                    authorId = 2,
                     cuisineCategory = view?.findViewById<TextView>(R.id.kitchen_category_title)?.text.toString(),
                     dishTime = CookingTimeConverter.convertToString(
                         view?.findViewById<EditText>(R.id.cooking_time_hours)?.text.toString(),
@@ -254,12 +267,18 @@ class RecipeEditorFragment : Fragment() {
                     ),
                     ingredientsList = IngredientService.getIngredients(),
                     cookingList = CookingStageService.getCookingSteps(),
-                    previewURL = args.recipe?.previewURL,
+                    previewUri = when {
+                        imageRecipePreviewUri !== null -> imageRecipePreviewUri
+                        imageRecipePreviewTag == imageRecipePreviewIsEmptyTag -> null
+                        args.recipe?.previewUri !== null -> args.recipe?.previewUri
+                        else -> null
+                    },
                     isIngredients = false,
                     isCookingSteps = false,
                     favorite = false
 
                 )
+                Log.d("TAG", "R.drawable.ic_baseline_image_not_supported_24 id ${R.drawable.ic_baseline_image_not_supported_24}")
                 if (checkRecipeForEmptyFields(newRecipe)) {
                     clearCache()
                     resultBundle.putParcelable(RESULT_KEY_NEW_STAGE, newRecipe)
@@ -303,7 +322,7 @@ class RecipeEditorFragment : Fragment() {
         ).show()
     }
 
-    private fun clearCache(){
+    private fun clearCache() {
         ingredientService.targetIngredient = null
         ingredientService.setIngredientsList(mutableListOf())
         cookingStepsService.setCookingStepsList(mutableListOf())
@@ -313,5 +332,8 @@ class RecipeEditorFragment : Fragment() {
         const val RESULT_KEY_NEW_STAGE = "add new recipe"
         const val ORDER_KEY = "requestKey"
         const val RESULT_IMAGES = "image/*"
+        var imageRecipePreviewUri: Uri? = null
+        var imageRecipePreviewTag : String? = null
+        const val imageRecipePreviewIsEmptyTag = "empty image preview"
     }
 }

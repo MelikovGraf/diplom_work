@@ -8,19 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.newprescription.R
 import ru.netology.newprescription.activity.Ingredient
 import ru.netology.newprescription.databinding.IngredientsCompositionBinding
-
-
-interface IngredientActionListener {
-
-    fun onIngredientUp(ingredient: Ingredient, moveBy: Int)
-
-    fun onIngredientDown(ingredient: Ingredient, moveBy: Int)
-
-    fun onIngredientEdit(ingredient: Ingredient)
-
-    fun onIngredientDelete(ingredient: Ingredient)
-
-}
+import ru.netology.newprescription.demo.adapter.listener.IngredientActionListener
 
 class IngredientsAdapter(
     private val ingredientActionListener: IngredientActionListener

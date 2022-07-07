@@ -33,10 +33,6 @@ class DetailsViewModel(
 
     override fun onFavoriteClicked(recipe: Recipe) = repository.isFavorite(recipe.id)
 
-    override fun onIngredientsShowClicked(recipe: Recipe) = repository.ingredientsSteps(recipe)
-
-    override fun onCookStepsShowClicked(recipe: Recipe) = repository.cookSteps(recipe)
-
     override fun onDeleteClicked(recipe: Recipe) {
         deleteRecipe(recipe)
     }
