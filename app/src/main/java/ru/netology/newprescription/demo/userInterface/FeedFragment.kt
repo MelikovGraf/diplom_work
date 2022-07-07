@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.netology.newprescription.R
+import ru.netology.newprescription.activity.Cuisine
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.databinding.FeedFragmentBinding
 import ru.netology.newprescription.demo.adapter.RecipeAdapter
@@ -50,63 +51,59 @@ class FeedFragment : Fragment() {
         }
 
         val adapter = RecipeAdapter(viewModel)
+        val selectedKitchenList = OptionsFragment.initSettings()
 
         binding.recipeRecyclerView.adapter = adapter
 
         viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             val myId = 2
-            var recipes = recipeList
+            val filteredCategory = Cuisine.selectedKitchenList.filter { it.isChecked }.map { it.title }
 
-            if (recipeList.isEmpty()) binding.noResults.visibility = View.VISIBLE
-            else binding.noResults.visibility = View.GONE
+            setNoItemImageVisibility(binding, recipeList)
 
             when (binding.bottomNavigation.selectedItemId) {
                 R.id.all_recipes -> {
+                    val recipes = recipeList.filter { it.cuisineCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                    setNoItemImageVisibility(binding, recipes)
                 }
                 R.id.my_recipes -> {
-                    recipes = recipeList.filter { it.authorId == myId }
+                    val recipes = recipeList.filter { it.authorId == myId && it.cuisineCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
+                    setNoItemImageVisibility(binding, recipes)
                 }
                 R.id.favorite_recipes -> {
-                    recipes = recipeList.filter { it.favorite }
+                    val recipes = recipeList.filter { it.favorite && it.cuisineCategory in filteredCategory }
                     adapter.submitList(recipes)
-                    if (recipes.isEmpty()) binding.noResults.visibility = View.VISIBLE
-                }
-                else -> {
-                    adapter.submitList(recipeList)
-                    binding.noResults.visibility = View.GONE
+                    setNoItemImageVisibility(binding, recipes)
                 }
             }
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            var recipeList = viewModel.recipeList.value
+            val filteredCategory = Cuisine.selectedKitchenList.filter { it.isChecked }.map { it.title }
+            val recipeList = viewModel.recipeList.value
             when (item.itemId) {
                 R.id.all_recipes -> {
                     requireActivity().invalidateOptionsMenu()
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
-                    adapter.submitList(viewModel.recipeList.value)
+                    val recipes = recipeList?.filter { it.cuisineCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
                 R.id.my_recipes -> {
                     requireActivity().invalidateOptionsMenu()
                     val myId = 2
-                    recipeList = viewModel.recipeList.value?.filter { it.authorId == myId }
-                    adapter.submitList(recipeList)
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
+                    val recipes = recipeList?.filter { it.authorId == myId && it.cuisineCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
                 R.id.favorite_recipes -> {
                     requireActivity().invalidateOptionsMenu()
-                    recipeList = viewModel.recipeList.value?.filter { it.favorite }
-                    adapter.submitList(recipeList)
-                    if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
-                    else binding.noResults.visibility = View.GONE
+                    val recipes = recipeList?.filter { it.favorite && it.cuisineCategory in filteredCategory }
+                    adapter.submitList(recipes)
+                    setNoItemImageVisibility(binding, recipes)
                     return@setOnItemSelectedListener true
                 }
             }
@@ -183,7 +180,18 @@ class FeedFragment : Fragment() {
                 true
             }
 
+            R.id.filter_button -> {
+                val direction = FeedFragmentDirections.toOptionsFragment()
+                findNavController().navigate(direction)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setNoItemImageVisibility(binding: FeedFragmentBinding, recipeList: List<Recipe>?) {
+        if (recipeList?.isEmpty() == true) binding.noResults.visibility = View.VISIBLE
+        else binding.noResults.visibility = View.GONE
     }
 }

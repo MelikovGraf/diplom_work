@@ -1,7 +1,8 @@
 package ru.netology.newprescription.activity
 
+import android.net.Uri
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Recipe(
@@ -12,7 +13,7 @@ data class Recipe(
     val dishTime: String?,
     val ingredientsList: List<Ingredient>,
     val cookingList: List<CookingStage>,
-    val previewURL: String? = null,
+    val previewUri: Uri? = null,
     val isIngredients: Boolean = false,
     val isCookingSteps: Boolean = false,
     val favorite: Boolean = false,

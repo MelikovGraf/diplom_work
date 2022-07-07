@@ -1,13 +1,14 @@
 package ru.netology.newprescription.activity
 
+import android.net.Uri
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CookingStage(
     val descript: String,
     val uri: String? = null,
-    val stageImageURL: String? = null,
+    val stageImageUri: Uri? = null,
     val id: Int = UNDEFINED_ID
 
 ):Parcelable {

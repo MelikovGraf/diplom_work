@@ -35,13 +35,13 @@ class RecipeDetailsCookingStage :
             with(binding) {
                 cookingStageDescription.text = cookingStage.descript
                 stage.text = "Stage ${adapterPosition + 1}"
-                if (cookingStage.stageImageURL == null) {
+                if (cookingStage.stageImageUri == null) {
                     stagePreview.visibility = View.GONE
                 } else {
                     stagePreview.visibility = View.VISIBLE
                     Glide.with(binding.stagePreview)
                         .asDrawable()
-                        .load(cookingStage.stageImageURL)
+                        .load(cookingStage.stageImageUri)
                         .error(R.mipmap.ic_launcher_recipe)
                         .into(binding.stagePreview)
                 }

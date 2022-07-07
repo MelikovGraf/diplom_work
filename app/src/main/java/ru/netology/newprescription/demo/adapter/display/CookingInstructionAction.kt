@@ -10,22 +10,11 @@ import com.bumptech.glide.Glide
 import ru.netology.newprescription.R
 import ru.netology.newprescription.databinding.CreatingDishBinding
 import ru.netology.newprescription.activity.CookingStage
-
-interface CookingInstructionAction {
-
-    fun onCookingStageUp(cookingStage: CookingStage, moveBy: Int)
-
-    fun onCookingStageDown(cookingStage: CookingStage, moveBy: Int)
-
-    fun onCookingStageEdit(cookingStage: CookingStage)
-
-    fun onCookingStageDelete(cookingStage: CookingStage)
-
-}
+import ru.netology.newprescription.demo.adapter.listener.CookingStageActionListener
 
 class CookingInstructionStepsAdapter(
     val context: Context,
-    private val cookingInstructionAction: CookingInstructionAction
+    private val cookingStageActionListener: CookingStageActionListener
 ) : RecyclerView.Adapter<CookingInstructionStepsAdapter.CookingStepViewHolder>(),
     View.OnClickListener {
 
@@ -59,13 +48,13 @@ class CookingInstructionStepsAdapter(
             cookingStageOptions.tag = cookingStage
             stage.text = context.getString(R.string.stage, position + 1)
             cookingStageDescription.text = cookingStage.descript
-            if (cookingStage.stageImageURL == null) {
+            if (cookingStage.stageImageUri == null) {
                 stagePreview.visibility = View.GONE
             } else {
                 stagePreview.visibility = View.VISIBLE
                 Glide.with(holder.binding.stagePreview)
                     .asDrawable()
-                    .load(cookingStage.stageImageURL)
+                    .load(cookingStage.stageImageUri)
                     .error(R.drawable.ic_baseline_image_not_supported_24)
                     .into(holder.binding.stagePreview)
             }
@@ -88,19 +77,19 @@ class CookingInstructionStepsAdapter(
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.shift_up -> {
-                        cookingInstructionAction.onCookingStageUp(cookingStep, -1)
+                        cookingStageActionListener.onCookingStageUp(cookingStep, -1)
                         true
                     }
                     R.id.shift_down -> {
-                        cookingInstructionAction.onCookingStageDown(cookingStep, 1)
+                        cookingStageActionListener.onCookingStageDown(cookingStep, 1)
                         true
                     }
                     R.id.edit -> {
-                        cookingInstructionAction.onCookingStageEdit(cookingStep)
+                        cookingStageActionListener.onCookingStageEdit(cookingStep)
                         true
                     }
                     R.id.delete -> {
-                        cookingInstructionAction.onCookingStageDelete(cookingStep)
+                        cookingStageActionListener.onCookingStageDelete(cookingStep)
                         true
                     }
                     else -> false

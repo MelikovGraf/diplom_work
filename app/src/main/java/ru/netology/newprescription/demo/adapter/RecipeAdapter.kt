@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.newprescription.R
+import ru.netology.newprescription.activity.Cuisine
 import ru.netology.newprescription.databinding.RecipeViewFragmentBinding
 import ru.netology.newprescription.activity.Recipe
 import ru.netology.newprescription.demo.adapter.listener.RecipeListListener
@@ -47,7 +48,7 @@ class RecipeAdapter(
                 author.text = recipe.author
                 title.text = recipe.title
 
-                if (recipe.cuisineCategory == "Unknown category") {
+                if (recipe.cuisineCategory == Cuisine.selectedKitchenList.last().title) {
                     cuisineCategory.visibility = View.GONE
                 } else cuisineCategory.text = recipe.cuisineCategory
 
@@ -55,10 +56,10 @@ class RecipeAdapter(
                     dishTime.visibility = View.GONE
                 } else dishTime.text = recipe.dishTime
 
-                if (recipe.previewURL !== null) {
+                if (recipe.previewUri !== null) {
                     Glide.with(recipePreview)
                         .asDrawable()
-                        .load(recipe.previewURL)
+                        .load(recipe.previewUri)
                         .error(R.drawable.ic_baseline_image_not_supported_24)
                         .into(recipeOverview)
                 } else {

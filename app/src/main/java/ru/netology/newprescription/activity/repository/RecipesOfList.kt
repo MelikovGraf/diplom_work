@@ -19,10 +19,6 @@ interface RecipesOfList {
 
     fun searchRecipe(request:String)
 
-    fun ingredientsSteps(recipe: Recipe)
-
-    fun cookSteps(recipe: Recipe)
-
     companion object {
         const val CANCEL_SEARCH = "cancel search"
     }
