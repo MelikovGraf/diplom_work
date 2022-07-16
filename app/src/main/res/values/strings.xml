@@ -1,6 +1,6 @@
 <resources>
     <!-- Screen titles -->
-    <string name="app_name">New prescription</string>
+    <string name="app_name">NMedia</string>
     <string name="recipe_list">Recipe list</string>
     <string name="recipe_details">Recipe details</string>
 

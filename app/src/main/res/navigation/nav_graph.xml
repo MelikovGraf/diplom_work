@@ -6,7 +6,7 @@
     app:startDestination="@id/feedFragment">
     <fragment
         android:id="@+id/feedFragment"
-        android:name="ru.netology.newprescription.demo.userInterface.FeedFragment"
+        android:name="ru.netology.diplom_work.demo.userInterface.FeedFragment"
         android:label="ListFragment"
         tools:layout="@layout/feed_fragment">
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="ru.netology.newprescription.demo.userInterface.DetailsFragment"
+        android:name="ru.netology.diplom_work.demo.userInterface.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
             android:name="recipeId"
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/recipeEditorFragment"
-        android:name="ru.netology.newprescription.demo.userInterface.RecipeEditorFragment"
+        android:name="ru.netology.diplom_work.demo.userInterface.RecipeEditorFragment"
         android:label="EditorFragment"
         tools:layout="@layout/recipe_editor_fragment">
 
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/cookingStageEditorFragment"
-        android:name="ru.netology.newprescription.demo.userInterface.CookingStageEditorFragment"
+        android:name="ru.netology.diplom_work.demo.userInterface.CookingStageEditorFragment"
         android:label="CookingStageEditorFragment"
         tools:layout="@layout/cooking_stage_editor"
         >
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/optionsFragment"
-        android:name="ru.netology.newprescription.demo.userInterface.OptionsFragment"
+        android:name="ru.netology.diplom_work.demo.userInterface.OptionsFragment"
         android:label="Settings"
         tools:layout="@layout/options_fragment"
         />

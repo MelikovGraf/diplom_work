@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "ru.netology.newprescription"
+        applicationId "ru.netology.diplom_work"
         minSdk 24
         targetSdk 32
         versionCode 1
